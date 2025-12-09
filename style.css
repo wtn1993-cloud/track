@@ -40,7 +40,7 @@ body {
 }
 
 #taskDisplayTitle {
-  font-size: 0.45rem;
+  font-size: 0.8rem;
   width: 190px;
   height: max-content;
   background-color: lightgrey;
