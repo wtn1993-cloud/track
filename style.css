@@ -29,7 +29,7 @@ body {
 }
 
 #taskDisplay {
-  font-size: 0.4rem;
+  font-size: 0.6rem;
   width: 90vw;
   height: max-content;
   background-color: lightgrey;
