@@ -20,9 +20,11 @@ body {
 
 #sobrietyTracker {
   font-size:.6rem;
-  padding-bottom:8px;
 }
 
+#sobrietyContainer {
+  padding-bottom:8px;
+}
 
 #resetSobriety {
   padding: 2px;
