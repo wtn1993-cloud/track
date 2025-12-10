@@ -1,3 +1,5 @@
+"use strict";
+
 document.addEventListener("DOMContentLoaded", () => {
   const taskContainer = document.getElementById("taskContainer");
   const submitBtn = document.querySelector(".taskCounterSubmit");
