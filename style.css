@@ -23,7 +23,12 @@ body {
 }
 
 #resetSobriety {
-  height:10px;
+  padding: 4px 10px;
+  font-size: 12px;
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 6px;
 }
 
 #taskContainer {
