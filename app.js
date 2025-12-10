@@ -143,3 +143,45 @@ function displayTaskTimestamps() {
     tsContainer.appendChild(taskDiv);
   });
 }
+
+// Get stored start date from localStorage or set a default
+let sobrietyStart = localStorage.getItem("sobrietyStart")
+  ? new Date(localStorage.getItem("sobrietyStart"))
+  : new Date(2025, 0, 1, 0, 0, 0); // default start date
+
+function updateSobriety() {
+  const now = new Date();
+  let diff = now - sobrietyStart; // difference in milliseconds
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= days * (1000 * 60 * 60 * 24);
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  diff -= hours * (1000 * 60 * 60);
+
+  const minutes = Math.floor(diff / (1000 * 60));
+
+  const tracker = document.getElementById("sobrietyTracker");
+  tracker.textContent = `Congrats! You have ${days} days, ${hours} hours, ${minutes} minutes of sobriety.`;
+}
+
+// Call every minute
+updateSobriety();
+setInterval(updateSobriety, 60 * 1000);
+
+// Reset button
+document.getElementById("resetSobriety").addEventListener("click", () => {
+  const newDate = prompt("Enter your new sobriety start date (YYYY-MM-DD):");
+  if (!newDate) return;
+
+  const parsedDate = new Date(newDate);
+  if (isNaN(parsedDate)) {
+    alert("Invalid date format!");
+    return;
+  }
+
+  sobrietyStart = parsedDate;
+  localStorage.setItem("sobrietyStart", sobrietyStart.toISOString());
+  updateSobriety();
+});
+
