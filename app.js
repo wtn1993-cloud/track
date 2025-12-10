@@ -148,7 +148,7 @@ function displayTaskTimestamps() {
 // Get stored start date from localStorage or set a default
 let sobrietyStart = localStorage.getItem("sobrietyStart")
   ? new Date(localStorage.getItem("sobrietyStart"))
-  : new Date(2025, 0, 1, 0, 0, 0); // default start date
+  : new Date(); // default: now
 
 function updateSobriety() {
   const now = new Date();
@@ -175,16 +175,7 @@ setInterval(updateSobriety, 1000);
 
 // Reset button
 document.getElementById("resetSobriety").addEventListener("click", () => {
-  const newDate = prompt("Enter your new sobriety start date (YYYY-MM-DD HH:MM:SS):");
-  if (!newDate) return;
-
-  const parsedDate = new Date(newDate);
-  if (isNaN(parsedDate)) {
-    alert("Invalid date format!");
-    return;
-  }
-
-  sobrietyStart = parsedDate;
+  sobrietyStart = new Date();
   localStorage.setItem("sobrietyStart", sobrietyStart.toISOString());
   updateSobriety();
 });
