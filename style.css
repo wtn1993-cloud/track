@@ -23,8 +23,8 @@ body {
 }
 
 #resetSobriety {
-  padding: 4px 10px;
-  font-size: 12px;
+  padding: 2px 4px;
+  font-size: 10px;
   display: inline-block;
   margin-left: 10px;
   cursor: pointer;
