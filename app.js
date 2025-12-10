@@ -145,14 +145,13 @@ function displayTaskTimestamps() {
 }
 
 
-// Get stored start date from localStorage or set a default
 let sobrietyStart = localStorage.getItem("sobrietyStart")
   ? new Date(localStorage.getItem("sobrietyStart"))
-  : new Date(); // default: now
+  : new Date();
 
 function updateSobriety() {
   const now = new Date();
-  let diff = now - sobrietyStart; // difference in milliseconds
+  let diff = now - sobrietyStart;
 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   diff -= days * (1000 * 60 * 60 * 24);
@@ -165,18 +164,17 @@ function updateSobriety() {
 
   const seconds = Math.floor(diff / 1000);
 
-  const tracker = document.getElementById("sobrietyTracker");
-  tracker.textContent = `Congrats! You have ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds of sobriety.`;
+  document.getElementById("sobrietyTracker").textContent =
+    `Congrats! You have ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds of sobriety.`;
 }
 
-// Update every second
 updateSobriety();
 setInterval(updateSobriety, 1000);
 
-// Reset button
 document.getElementById("resetSobriety").addEventListener("click", () => {
   sobrietyStart = new Date();
   localStorage.setItem("sobrietyStart", sobrietyStart.toISOString());
   updateSobriety();
 });
+
 
