@@ -53,12 +53,26 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Clear localStorage handling
-  clearBtn.addEventListener("click", () => {
-    Object.keys(localStorage).forEach((key) => localStorage.removeItem(key));
-    displayTaskCounters();
-    displayTaskTimestamps();
-  });
+clearBtn.addEventListener("click", () => {
+  const modal = document.getElementById("confirmModal");
+  modal.style.display = "flex";  // Show modal
 });
+document.getElementById("confirmYes").addEventListener("click", () => {
+  // Clear storage
+  Object.keys(localStorage).forEach((key) => localStorage.removeItem(key));
+
+  displayTaskCounters();
+  displayTaskTimestamps();
+
+  // Close modal
+  document.getElementById("confirmModal").style.display = "none";
+});
+
+document.getElementById("confirmNo").addEventListener("click", () => {
+  // Just close modal
+  document.getElementById("confirmModal").style.display = "none";
+});
+
 
 // ===== Display Task Counters =====
 function displayTaskCounters() {
