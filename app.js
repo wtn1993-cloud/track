@@ -1,4 +1,7 @@
+
+
 "use strict";
+console.log("app.js loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
   const taskContainer = document.getElementById("taskContainer");
