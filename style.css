@@ -29,23 +29,24 @@ body {
 }
 
 #taskDisplay {
-  font-size: 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 200;
   width: 90vw;
   height: max-content;
   background-color: lightgrey;
   margin-top: 4px;
-  padding: 0px 8px 8px 2px;
+  padding: 0px 8px 8px 16px;
   line-height: 1.3;
   box-sizing: border-box;
 }
 
 #taskDisplayTitle {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   width: 190px;
   height: max-content;
   background-color: lightgrey;
   margin-top: 4px;
-  padding: 8px 8px 0 2px;
+  padding: 8px 8px 0 12px;
   gap: 2px;
   box-sizing: border-box;
 }
@@ -104,7 +105,7 @@ body {
   height: 12px;
   display: flex;
   margin: 40px 0 0 0;
-  gap: 40px;
+  gap: 30px;
 }
 
 #taskContainerStats {
@@ -117,4 +118,35 @@ body {
   font-size: 0.8rem;
   gap: 2px;
   margin: 0px 0 0 0;
+  box-size: border-box;
+}
+
+.fire-icon {
+  font-size: 12px;
+  animation: firePulse 0.9s infinite alternate;
+  filter: drop-shadow(0 0 6px orange);
+}
+
+@keyframes firePulse {
+  from {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px orange);
+  }
+  to {
+    transform: scale(1.25);
+    filter: drop-shadow(0 0 10px red);
+  }
+}
+
+.task-timestamp-row {
+  font-size: 0.55rem;
+  font-weight: 100;
+  padding: 4px;
+  box-sizing: border-box;
+  background-color: lightgrey;
+  padding: 16px;
+}
+
+#taskTimestampsContainerTitle {
+  font-size: 0.8rem;
 }
