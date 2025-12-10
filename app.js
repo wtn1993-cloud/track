@@ -1,6 +1,7 @@
-// ====== DOMContentLoaded Initialization ======
 document.addEventListener("DOMContentLoaded", () => {
   const taskContainer = document.getElementById("taskContainer");
+  const submitBtn = document.querySelector(".taskCounterSubmit");
+  const clearBtn = document.getElementById("clearLocalStorage");
 
   // Initialize tasks in localStorage if not already set
   const existingTasks = taskContainer.querySelectorAll(".taskCounter");
@@ -11,77 +12,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Render counters and timestamps
+  // Initial render
   displayTaskCounters();
   displayTaskTimestamps();
 
-  // Setup hide/show toggle button for timestamps
-  const toggleBtn = document.createElement("button");
-  toggleBtn.textContent = "Hide/Show Timestamps";
-  toggleBtn.addEventListener("click", () => {
-    const tsContainer = document.getElementById("taskTimestampsContainer");
-    tsContainer.style.display =
-      tsContainer.style.display === "none" ? "block" : "none";
-  });
-});
-
-// ====== Task Click Handling (Event Delegation) ======
-const taskContainer = document.getElementById("taskContainer");
-taskContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("taskCounter")) {
-    e.target.classList.toggle("selected");
-  }
-});
-
-// ====== Submit Button Handling ======
-const submitBtn = document.querySelector(".taskCounterSubmit");
-submitBtn.addEventListener("click", () => {
-  const selectedTasks = document.querySelectorAll(".taskCounter.selected");
-
-  selectedTasks.forEach((task) => {
-    const name = task.textContent.trim();
-
-    // Increment task counter
-    let count = parseInt(localStorage.getItem(name)) || 0;
-    localStorage.setItem(name, count + 1);
-
-    // Add timestamp
-    const now = new Date().toISOString();
-    const key = name + "_timestamps";
-    const timestamps = JSON.parse(localStorage.getItem(key)) || [];
-    timestamps.push(now);
-    localStorage.setItem(key, JSON.stringify(timestamps));
+  // Task Click Handling (Event Delegation)
+  taskContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("taskCounter")) {
+      e.target.classList.toggle("selected");
+    }
   });
 
-  // Update displays
-  displayTaskCounters();
-  displayTaskTimestamps();
+  // Submit Button Handling
+  submitBtn.addEventListener("click", () => {
+    const selectedTasks = document.querySelectorAll(".taskCounter.selected");
 
-  // Deselect all
-  selectedTasks.forEach((task) => task.classList.remove("selected"));
+    selectedTasks.forEach((task) => {
+      const name = task.textContent.trim();
 
-  console.log(
-    "Submitted tasks with timestamps:",
-    Array.from(selectedTasks).map((t) => t.textContent.trim())
-  );
-});
+      // Increment counter
+      let count = parseInt(localStorage.getItem(name)) || 0;
+      localStorage.setItem(name, count + 1);
 
-// ====== Clear LocalStorage Button ======
-const clearBtn = document.getElementById("clearLocalStorage");
-clearBtn.addEventListener("click", () => {
-  Object.keys(localStorage).forEach((key) => localStorage.removeItem(key));
-  displayTaskCounters();
-  displayTaskTimestamps();
+      // Add timestamp
+      const now = new Date().toISOString();
+      const key = name + "_timestamps";
+      const timestamps = JSON.parse(localStorage.getItem(key)) || [];
+      timestamps.push(now);
+      localStorage.setItem(key, JSON.stringify(timestamps));
+    });
+
+    displayTaskCounters();
+    displayTaskTimestamps();
+
+    selectedTasks.forEach((task) => task.classList.remove("selected"));
+  });
+
+  // Clear LocalStorage Button
+  clearBtn.addEventListener("click", () => {
+    Object.keys(localStorage).forEach((key) => localStorage.removeItem(key));
+    displayTaskCounters();
+    displayTaskTimestamps();
+  });
 });
 
 // ====== Display Task Counters ======
 function displayTaskCounters() {
   const display = document.getElementById("taskDisplay");
-  display.innerHTML = ""; // clear old output
+  display.innerHTML = "";
 
   const tasks = document.querySelectorAll(".taskCounter");
 
-  // Milestone icons
   const icons = {
     5: "🔥",
     10: "💥",
@@ -117,7 +98,7 @@ function displayTaskCounters() {
     row.appendChild(label);
 
     const milestone = Math.floor(count / 5) * 5;
-    if (milestone >= 5 && milestone <= 100 && icons[milestone]) {
+    if (icons[milestone]) {
       const icon = document.createElement("span");
       icon.className = "fire-icon";
       icon.textContent = icons[milestone];
@@ -130,12 +111,8 @@ function displayTaskCounters() {
 
 // ====== Display Task Timestamps ======
 function displayTaskTimestamps() {
-  const tsContainer = document.getElementById("taskTimestampsContainerTitle");
+  const tsContainer = document.getElementById("taskTimestampsContainer");
 
-  // Clear the container completely
-  tsContainer.innerHTML = "<h3>Task Submission Times:</h3>";
-
-  // Iterate over keys in localStorage that end with "_timestamps"
   Object.keys(localStorage).forEach((key) => {
     if (!key.endsWith("_timestamps")) return;
 
