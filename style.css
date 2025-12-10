@@ -21,7 +21,7 @@ body {
 #taskContainer {
   width: 90vw;
   height: max-content;
-  background-color: #1c1d21;
+  background-color: #272c33;
   padding: 2px 2px 26px 2px;
   flex-wrap: wrap;
   display: flex;
@@ -34,7 +34,7 @@ body {
   font-weight: 200;
   width: 90vw;
   height: max-content;
-  background-color: #1c1d21;
+  background-color: #272c33;
   margin-top: 4px;
   padding: 0px 8px 8px 16px;
   line-height: 1.3;
@@ -111,7 +111,7 @@ body {
 #taskContainerStats {
   width: 90vw;
   height: max-content;
-  background-color: #1c1d21;
+  background-color: #272c33;
   padding: 2px;
   flex-wrap: wrap;
   display: flex;
@@ -143,12 +143,13 @@ body {
   font-weight: 100;
   padding: 4px;
   box-sizing: border-box;
-  background-color: #1c1d21;
+  background-color: #272c33;
   padding: 16px;
 }
 
 #taskTimestampsContainerTitle {
   font-size: 0.8rem;
+  padding-top: 4px;
 }
 
 #taskContainerStats {
