@@ -1,128 +1,87 @@
-const tasks = document.querySelectorAll(".taskCounter");
-const submitBtn = document.querySelector(".taskCounterSubmit");
-
+// ====== DOMContentLoaded Initialization ======
 document.addEventListener("DOMContentLoaded", () => {
   const taskContainer = document.getElementById("taskContainer");
 
-  // Grab all existing tasks in HTML
+  // Initialize tasks in localStorage if not already set
   const existingTasks = taskContainer.querySelectorAll(".taskCounter");
-
   existingTasks.forEach((task) => {
     const name = task.textContent.trim();
-
-    // Initialize in localStorage to 0 (overwrites any existing value)
-    localStorage.setItem(name, 0);
+    if (!localStorage.getItem(name)) {
+      localStorage.setItem(name, 0);
+    }
   });
 
-  // Render tasks from localStorage
-  renderTasks();
+  // Render counters and timestamps
+  displayTaskCounters();
+  displayTaskTimestamps();
+
+  // Setup hide/show toggle button for timestamps
+  const toggleBtn = document.createElement("button");
+  toggleBtn.textContent = "Hide/Show Timestamps";
+  toggleBtn.addEventListener("click", () => {
+    const tsContainer = document.getElementById("taskTimestampsContainer");
+    tsContainer.style.display =
+      tsContainer.style.display === "none" ? "block" : "none";
+  });
 });
 
-function displayTaskTimestamps() {
-  const tsContainer = document.getElementById("taskTimestampsContainer");
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-
-    // Only process timestamp keys
-    if (!key.endsWith("_timestamps")) continue;
-
-    const taskName = key.replace("_timestamps", "");
-    const timestamps = JSON.parse(localStorage.getItem(key)) || [];
-
-    if (timestamps.length > 0) {
-      const taskDiv = document.createElement("div");
-      taskDiv.className = "task-timestamp-row";
-
-      const label = document.createElement("strong");
-      label.textContent = taskName + ":";
-      taskDiv.appendChild(label);
-
-      timestamps.forEach((ts) => {
-        const tsEl = document.createElement("div");
-        tsEl.textContent = new Date(ts).toLocaleString();
-        taskDiv.appendChild(tsEl);
-      });
-
-      tsContainer.appendChild(taskDiv);
-    }
+// ====== Task Click Handling (Event Delegation) ======
+const taskContainer = document.getElementById("taskContainer");
+taskContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("taskCounter")) {
+    e.target.classList.toggle("selected");
   }
-}
+});
 
-document.addEventListener("DOMContentLoaded", () => {
-  const taskContainer = document.getElementById("taskContainer");
+// ====== Submit Button Handling ======
+const submitBtn = document.querySelector(".taskCounterSubmit");
+submitBtn.addEventListener("click", () => {
+  const selectedTasks = document.querySelectorAll(".taskCounter.selected");
 
-  // Grab all existing tasks in HTML
-  const existingTasks = taskContainer.querySelectorAll(".taskCounter");
-
-  existingTasks.forEach((task) => {
+  selectedTasks.forEach((task) => {
     const name = task.textContent.trim();
 
-    // Initialize in localStorage to 0 (overwrites any existing value)
-    localStorage.setItem(name, 0);
+    // Increment task counter
+    let count = parseInt(localStorage.getItem(name)) || 0;
+    localStorage.setItem(name, count + 1);
+
+    // Add timestamp
+    const now = new Date().toISOString();
+    const key = name + "_timestamps";
+    const timestamps = JSON.parse(localStorage.getItem(key)) || [];
+    timestamps.push(now);
+    localStorage.setItem(key, JSON.stringify(timestamps));
   });
 
-  // Render tasks from localStorage
-  renderTasks();
-});
-
-// Toggle selection
-tasks.forEach((task) => {
-  task.addEventListener("click", () => {
-    task.classList.toggle("selected");
-  });
-});
-
-// Submit
-submitBtn.addEventListener("click", () => {
-  const selectedTasks = [];
-
-  tasks.forEach((task) => {
-    if (task.classList.contains("selected")) {
-      const taskName = task.textContent.trim();
-      selectedTasks.push(taskName);
-
-      // --- Increment counter in localStorage ---
-      let count = localStorage.getItem(taskName);
-      count = count ? parseInt(count) + 1 : 1;
-      localStorage.setItem(taskName, count);
-
-      // --- Add timestamp for this submission ---
-      const now = new Date().toISOString(); // ISO format
-      let timestamps =
-        JSON.parse(localStorage.getItem(taskName + "_timestamps")) || [];
-      timestamps.push(now);
-      localStorage.setItem(
-        taskName + "_timestamps",
-        JSON.stringify(timestamps)
-      );
-    }
-  });
-
-  // Update the display after submission
+  // Update displays
   displayTaskCounters();
-  displayTaskTimestamps(); // <-- updates the separate timestamp div
+  displayTaskTimestamps();
 
-  // Optionally, deselect tasks after submission
-  tasks.forEach((task) => task.classList.remove("selected"));
+  // Deselect all
+  selectedTasks.forEach((task) => task.classList.remove("selected"));
 
-  console.log("Submitted tasks with timestamps:", selectedTasks);
+  console.log(
+    "Submitted tasks with timestamps:",
+    Array.from(selectedTasks).map((t) => t.textContent.trim())
+  );
 });
 
+// ====== Clear LocalStorage Button ======
 const clearBtn = document.getElementById("clearLocalStorage");
-
 clearBtn.addEventListener("click", () => {
-  localStorage.clear();
+  Object.keys(localStorage).forEach((key) => localStorage.removeItem(key));
   displayTaskCounters();
+  displayTaskTimestamps();
 });
 
+// ====== Display Task Counters ======
 function displayTaskCounters() {
   const display = document.getElementById("taskDisplay");
   display.innerHTML = ""; // clear old output
 
   const tasks = document.querySelectorAll(".taskCounter");
 
-  // Icon map for each milestone
+  // Milestone icons
   const icons = {
     5: "🔥",
     10: "💥",
@@ -148,26 +107,56 @@ function displayTaskCounters() {
 
   tasks.forEach((task) => {
     const name = task.textContent.trim();
-    const count = parseInt(localStorage.getItem(name));
+    const count = parseInt(localStorage.getItem(name)) || 0;
 
-    if (!isNaN(count)) {
-      const row = document.createElement("div");
+    const row = document.createElement("div");
+    row.className = "task-counter-row";
 
-      const label = document.createElement("span");
-      label.textContent = `${name}: ${count}`;
-      row.appendChild(label);
+    const label = document.createElement("span");
+    label.textContent = `${name}: ${count}`;
+    row.appendChild(label);
 
-      // Determine which icon to show
-      const milestone = Math.floor(count / 5) * 5; // nearest 5 below count
-
-      if (milestone >= 5 && milestone <= 100 && icons[milestone]) {
-        const icon = document.createElement("span");
-        icon.className = "fire-icon"; // reuse animation CSS
-        icon.textContent = icons[milestone];
-        row.appendChild(icon);
-      }
-
-      display.appendChild(row);
+    const milestone = Math.floor(count / 5) * 5;
+    if (milestone >= 5 && milestone <= 100 && icons[milestone]) {
+      const icon = document.createElement("span");
+      icon.className = "fire-icon";
+      icon.textContent = icons[milestone];
+      row.appendChild(icon);
     }
+
+    display.appendChild(row);
+  });
+}
+
+// ====== Display Task Timestamps ======
+function displayTaskTimestamps() {
+  const tsContainer = document.getElementById("taskTimestampsContainerTitle");
+
+  // Clear the container completely
+  tsContainer.innerHTML = "<h3>Task Submission Times:</h3>";
+
+  // Iterate over keys in localStorage that end with "_timestamps"
+  Object.keys(localStorage).forEach((key) => {
+    if (!key.endsWith("_timestamps")) return;
+
+    const taskName = key.replace("_timestamps", "");
+    const timestamps = JSON.parse(localStorage.getItem(key)) || [];
+
+    if (timestamps.length === 0) return;
+
+    const taskDiv = document.createElement("div");
+    taskDiv.className = "task-timestamp-row";
+
+    const label = document.createElement("strong");
+    label.textContent = taskName + ":";
+    taskDiv.appendChild(label);
+
+    timestamps.forEach((ts) => {
+      const tsEl = document.createElement("div");
+      tsEl.textContent = new Date(ts).toLocaleString();
+      taskDiv.appendChild(tsEl);
+    });
+
+    tsContainer.appendChild(taskDiv);
   });
 }
