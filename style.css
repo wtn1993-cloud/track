@@ -72,6 +72,10 @@ body {
   box-sizing: border-box;
 }
 
+.block_Header {
+  font-size: .7rem;
+}
+
 .taskCounter {
   width: max-content;
   height: 24px;
