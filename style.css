@@ -22,6 +22,10 @@ body {
   font-size:.6rem;
 }
 
+#resetSobriety {
+  height:20px;
+}
+
 #taskContainer {
   width: 90vw;
   height: max-content;
