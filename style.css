@@ -29,6 +29,7 @@ body {
   margin-left: 10px;
   cursor: pointer;
   border-radius: 6px;
+  font-size:.6rem;
 }
 
 #taskContainer {
