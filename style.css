@@ -11,6 +11,43 @@ body {
   color: white;
 }
 
+/* Modal Background */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Modal Box */
+.modal-content {
+  background: #222;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 300px;
+  color: white;
+  text-align: center;
+}
+
+/* Buttons inside modal */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-buttons div {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  user-select: none;
+}
+
+
 /* Container to align input and button */
 .app-container {
   display: flex;
