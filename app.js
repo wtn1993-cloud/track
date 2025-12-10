@@ -1,7 +1,4 @@
-
-
 "use strict";
-console.log("app.js loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
   const taskContainer = document.getElementById("taskContainer");
@@ -21,14 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
   displayTaskCounters();
   displayTaskTimestamps();
 
-  // Task Click Handling (Event Delegation)
+  // Task click handling
   taskContainer.addEventListener("click", (e) => {
     if (e.target.classList.contains("taskCounter")) {
       e.target.classList.toggle("selected");
     }
   });
 
-  // Submit Button Handling
+  // Submit button handling
   submitBtn.addEventListener("click", () => {
     const selectedTasks = document.querySelectorAll(".taskCounter.selected");
 
@@ -47,13 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem(key, JSON.stringify(timestamps));
     });
 
+    // Re-render displays
     displayTaskCounters();
     displayTaskTimestamps();
 
+    // Deselect tasks
     selectedTasks.forEach((task) => task.classList.remove("selected"));
   });
 
-  // Clear LocalStorage Button
+  // Clear localStorage handling
   clearBtn.addEventListener("click", () => {
     Object.keys(localStorage).forEach((key) => localStorage.removeItem(key));
     displayTaskCounters();
@@ -61,10 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// ====== Display Task Counters ======
+// ===== Display Task Counters =====
 function displayTaskCounters() {
   const display = document.getElementById("taskDisplay");
-  display.innerHTML = "";
+  display.innerHTML = ""; // clear old display
 
   const tasks = document.querySelectorAll(".taskCounter");
 
@@ -114,16 +113,18 @@ function displayTaskCounters() {
   });
 }
 
-// ====== Display Task Timestamps ======
+// ===== Display Task Timestamps =====
 function displayTaskTimestamps() {
   const tsContainer = document.getElementById("taskTimestampsContainer");
+
+  // Clear previous timestamps
+  tsContainer.innerHTML = "<h3>Task Submission Times:</h3>";
 
   Object.keys(localStorage).forEach((key) => {
     if (!key.endsWith("_timestamps")) return;
 
     const taskName = key.replace("_timestamps", "");
     const timestamps = JSON.parse(localStorage.getItem(key)) || [];
-
     if (timestamps.length === 0) return;
 
     const taskDiv = document.createElement("div");
