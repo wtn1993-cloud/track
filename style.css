@@ -22,6 +22,10 @@ body {
   font-size:.6rem;
 }
 
+#sobrietyContainer {
+  padding-bottom:4px;
+}
+
 #resetSobriety {
   padding: 4px;
   font-size: 14px;
